@@ -31,7 +31,7 @@ RSpec.describe 'application creation' do
           fill_in 'Zip Code:', with: '80238'
           fill_in 'Explain why you would be a good home to this pet:', with: 'I love animals'
           click_button "Submit"
-         
+          
           expect(page).to have_current_path("/applications/#{Application.last.id}")
           # expect(page).to have_content('Bob')
         end
