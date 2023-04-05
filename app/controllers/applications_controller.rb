@@ -25,10 +25,16 @@ class ApplicationsController < ApplicationController
 
   def update
     application = Application.find(params[:id])
-    if application.description == nil && application.status == "In Progress"
-      application.update(status: params[:status], description: params[:freeform])
+    if params[:freeform].length > 12
+      if application.description == nil && application.status == "In Progress"
+        application.update(status: params[:status], description: params[:freeform])
+        redirect_to "/applications/#{application.id}"
+      end
+    else
+      flash[:notice] = "Description must be filled out and be at least 12 characters."
       redirect_to "/applications/#{application.id}"
     end
+
   end
 
 private
