@@ -166,6 +166,30 @@ RSpec.describe "/applications/:id" do
     expect(page.has_button?("Search")).to eq(false)
   end
 
+  it "cannot submit with empty description field" do
+    visit "/applications/#{@application_4.id}"
+
+    expect(page).to have_content("In Progress")
+    expect(page).to have_no_content("Pending")
+    expect(page).to have_no_content("Description must be filled out and be at least 12 characters.")
+
+    fill_in("pet_name", with: "Foster")
+    click_button("Search")
+    click_link("Adopt #{@pet_1.id}")
+    click_button("Submit")
+
+    expect(page).to have_content("Description must be filled out and be at least 12 characters.")
+    expect(page).to have_content("In Progress")
+    expect(page).to have_no_content("Pending")
+
+    fill_in("Description", with: "This animal is my calling")
+    click_button("Submit")
+    
+    expect(page).to have_no_content("Description must be filled out and be at least 12 characters.")
+    expect(page).to have_no_content("In Progress")
+    expect(page).to have_content("Pending")
+  end
+
   it 'submission of application only updates description and status attributes of application' do
     visit "/applications/#{@application_4.id}"
 
